@@ -49,12 +49,28 @@ class my_list {
             list->head = list->tail = NULL;
         }
 
-        int push_front(int value) {
+        int search(header *list, int value){
             if(!list){
-                LOG_CHAR(LOG_ERROR, "push_front() return 1")
-                return 1;
+                LOG_CHAR(LOG_ERROR, "search() return -1")
+                return -1;
             }
 
+            int pos = 0;
+            lst *tmp = list->head;
+
+            while(tmp) {
+                if(value == tmp->value)
+                    return pos;
+                
+                tmp = tmp->next;
+                pos++;
+            }
+
+            LOG_CHAR(LOG_ERROR, "search() return -2")
+            return -2;
+        }
+
+        void push_front(int value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
             tmp->value = value;
@@ -70,15 +86,9 @@ class my_list {
                 list->tail = tmp;
             
             list->size++;
-            return 0;
         }
 
-        int push_back(int value) {
-            if(!list) {
-                LOG_CHAR(LOG_ERROR, "push_back() return 1")
-                return 1;
-            }
-
+        void push_back(int value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
             tmp->value = value;
@@ -94,32 +104,24 @@ class my_list {
                 list->head = tmp;
             
             list->size++;
-            return 0;
         }
 
-        int print_list() {
-            if(!list) {
-                LOG_CHAR(LOG_ERROR, "print_list() return 1")
-                return 1;
+        void print_list() {
+            if(list) {
+                lst *tmp = list->head;
+
+                while (tmp) {
+                    cout << tmp->value << " ";
+                    tmp = tmp->next;
+                }
+
+                cout << endl;
             }
-
-            lst *tmp = list->head;
-
-            while (tmp) {
-                cout << tmp->value << " ";
-                tmp = tmp->next;
-            }
-
-            cout << endl;
-            return 0;
+            else
+                cout << "the list is empty" << endl;
         }
 
-        int pop_back() {
-            if(!list || list->tail == NULL) {
-                LOG_CHAR(LOG_ERROR, "pop_back() return 1")
-                return 1;
-            }
-
+        void pop_back() {
             lst *next = NULL;
             int tmp = 0;
         
@@ -136,15 +138,9 @@ class my_list {
             free(next);
         
             list->size--;
-            return 0;
         }
 
-        int pop_front() {
-            if(!list || list->head == NULL) {
-                LOG_CHAR(LOG_ERROR, "pop_front() return 1")
-                return 1;
-            }
-
+        void pop_front() {
             lst *prev = NULL;
             int tmp = 0;
         
@@ -160,27 +156,58 @@ class my_list {
             free(prev);
         
             list->size--;
-            return 0;
         }
 
-        int insert() {
-
-        }
-
-        int erase() {
+        void insert() {
 
         }
 
-        int swap() {
+        void erase(int value) {
+            lst *current_list_item = list->head;
+
+            while (current_list_item) {
+                lst *tmp = current_list_item;
+                current_list_item = current_list_item->next;
+
+                if(value == tmp->value) {
+                    if (tmp->prev) 
+                        tmp->prev->next = tmp->next;
+                    
+                    if (tmp->next) 
+                        tmp->next->prev = tmp->prev;
+                    
+                    if (!tmp->prev) 
+                        list->head = tmp->next;
+                    
+                    if (!tmp->next) 
+                        list->tail = tmp->prev;
+                    
+                    free(tmp);
+                    list->size--;
+                }
+            }
+        }
+
+        void swap() {
 
         }
 
-        int resize() {
+        void resize() {
 
         }
 
-        int clear() {
-            
+        void clear() {
+            lst *tmp = list->head;
+            lst *next = NULL;
+
+            while (tmp) {
+                next = tmp->next;
+                free(tmp);
+                tmp = next;
+            }
+
+            free(list);
+            list = NULL;
         }
 };
 
@@ -197,7 +224,7 @@ int main() {
     
     li.print_list();
 
-    li.pop_front();
+    li.erase(2);
     li.print_list();
 
     #if DEBUG
