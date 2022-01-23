@@ -1,5 +1,7 @@
 #include "../include/header.hpp"
 
+#define OFFSET 5
+
 template <class T>
 class my_vector {
     private:
@@ -12,13 +14,13 @@ class my_vector {
     // Member functions
 
         my_vector() {
-            capacity = Size = 1;
-            vector = new T[Size];
+            capacity = Size = 0;
+            vector = new T[capacity];
         }
 
         my_vector(int n, T value) {
             capacity = Size = n;
-            vector = new T[Size];
+            vector = new T[capacity];
 
             for (int i = 0; i < Size; i++)
                 vector[i] = value;
@@ -70,6 +72,18 @@ class my_vector {
             capacity = Size = n;
         }
 
+        void resize(int n) {
+            T *tmp = new T[n];
+
+            for (int i = 0; i < n; i++)
+                tmp[i] = vector[i];
+
+            delete[] vector;
+            vector = tmp;
+            Size = n;
+            capacity = Size + OFFSET;
+        }
+
         bool empty() {
             if(!this->Size)
                 return true;
@@ -83,22 +97,26 @@ class my_vector {
 
         // }
 
-        T at() {
-
+        T at(int index) {
+            return vector[index];
         }
 
         T front() {
-
+            return vector[0];
         }
 
         T back() {
-
+            return vector[this->Size];
         }
 
     // Modifiers
 
-        void push_back() {
+        void push_back(T value) {
+            vector[Size] = value;
+            this->Size++;
 
+            if(this->Size > this->capacity)
+                resize(this->Size);
         }
 
         void pop_back() {
@@ -115,6 +133,11 @@ class my_vector {
 
         void swap() {
 
+        }
+
+        void print_vector() {
+            for (int i = 0; i < this->Size; i++)
+                cout << vector[i] << " ";
         }
 
         void clear() {

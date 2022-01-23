@@ -10,8 +10,16 @@ int main() {
 	#endif
 
     my_vector<int> vt;
-    // for (int i = 0; i < 5; i++)
 
+    LOG_NUM(LOG_DEBUG, vt.size())
+    LOG_NUM(LOG_DEBUG, vt.max_size())
+
+    for (int i = 1; i <= 12; i++)
+        vt.push_back(i);
+
+    LOG_NUM(LOG_DEBUG, vt.size())
+    LOG_NUM(LOG_DEBUG, vt.max_size())
+    vt.print_vector();
     
 
     #if DEBUG
