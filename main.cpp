@@ -1,5 +1,4 @@
 #include <iostream>
-#include "/Users/dmitry/Programming/C/Lists/list_header.h"
 
 // ##############################
 #define DEBUG 1
@@ -23,7 +22,6 @@
 #endif
 // ##############################
 
-
 using namespace std;
 
 class my_list {
@@ -32,7 +30,7 @@ class my_list {
             int data;
             struct my_list_t *prev;
             struct my_list_t *next;
-        }my_list_s;
+        }lst;
         
         typedef struct _header {
             size_t size;
@@ -42,9 +40,17 @@ class my_list {
 
         header *list;
 
+    public:
+        my_list() {
+            list = (header*) malloc(sizeof(header));
+            list->size = 0;
+            list->head = list->tail = NULL;
+        }
+
         lst* get_elem(int index) {
             lst *tmp = NULL;
-            size_t i;
+            int i;
+            index--;    // Отсчет от 1, а не от 0
             
             if (index < list->size / 2) {
                 i = 0;
@@ -66,13 +72,6 @@ class my_list {
             return tmp;
         }
 
-    public:
-        my_list() {
-            list = (header*) malloc(sizeof(header));
-            list->size = 0;
-            list->head = list->tail = NULL;
-        }
-
         int searchByValue(int value){
             if(!list) {
                 LOG_CHAR(LOG_ERROR, "searchByValue() return -1")
@@ -83,7 +82,7 @@ class my_list {
             lst *tmp = list->head;
 
             while(tmp) {
-                if(value == tmp->value)
+                if(value == tmp->data)
                     return pos;
                 
                 tmp = tmp->next;
@@ -105,13 +104,13 @@ class my_list {
             for(int i = 1; i < pos; i++) 
                 tmp = tmp->next;
 
-            return tmp->value;
+            return tmp->data;
         }
 
         void push_front(int value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
-            tmp->value = value;
+            tmp->data = value;
             tmp->prev = NULL;
             tmp->next = list->head;
 
@@ -129,7 +128,7 @@ class my_list {
         void push_back(int value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
-            tmp->value = value;
+            tmp->data = value;
             tmp->prev = list->tail;
             tmp->next = NULL;
 
@@ -149,7 +148,7 @@ class my_list {
                 lst *tmp = list->head;
 
                 while (tmp) {
-                    cout << tmp->value << " ";
+                    cout << tmp->data << " ";
                     tmp = tmp->next;
                 }
 
@@ -172,7 +171,7 @@ class my_list {
             if (next == list->head) 
                 list->head = NULL;
             
-            tmp = next->value;
+            tmp = next->data;
             free(next);
         
             list->size--;
@@ -190,7 +189,7 @@ class my_list {
             if (prev == list->tail) 
                 list->tail = NULL;
             
-            tmp = prev->value;
+            tmp = prev->data;
             free(prev);
         
             list->size--;
@@ -201,7 +200,7 @@ class my_list {
             lst *elm = get_elem(index);
 
             if (elm) {
-                ins->value = value;
+                ins->data = value;
                 ins->prev = elm;
                 ins->next = elm->next;
                 
@@ -230,7 +229,7 @@ class my_list {
                 lst *tmp = current_list_item;
                 current_list_item = current_list_item->next;
 
-                if(value == tmp->value) {
+                if(value == tmp->data) {
                     if (tmp->prev) 
                         tmp->prev->next = tmp->next;
                     
@@ -249,12 +248,84 @@ class my_list {
             }
         }
 
-        void swap() {
+        lst* swap(lst *lst1, lst *lst2) {
+            // Возвращает новый корень списка
+            lst *prev1, *prev2, *next1, *next2;
+            lst *head = list->head;
 
+            prev1 = lst1->prev;  // узел предшествующий lst1
+            prev2 = lst2->prev;  // узел предшествующий lst2
+            next1 = lst1->next;  // узел следующий за lst1
+            next2 = lst2->next;  // узел следующий за lst2
+
+            if (lst2 == next1) {  // обмениваются соседние узлы
+                lst2->next = lst1;
+                lst2->prev = prev1;
+                lst1->next = next2;
+                lst1->prev = lst2;
+
+                if(next2 != NULL)
+                    next2->prev = lst1;
+                
+                if (lst1 != head)
+                    prev1->next = lst2;
+            }
+
+            else if (lst1 == next2) { // обмениваются соседние узлы
+                lst1->next = lst2;
+                lst1->prev = prev2;
+                lst2->next = next1;
+                lst2->prev = lst1;
+                if(next1 != NULL)
+                next1->prev = lst2;
+                if (lst2 != head)
+                prev2->next = lst1;
+            }
+
+            else { // обмениваются отстоящие узлы
+                if (lst1 != head)  // указатель prev можно установить только для элемента,
+                    prev1->next = lst2; // не являющегося корневым
+                
+                lst2->next = next1;
+                
+                if (lst2 != head)
+                    prev2->next = lst1;
+                
+                lst1->next = next2;
+                lst2->prev = prev1;
+                
+                if (next2 != NULL) // указатель next можно установить только для элемента,
+                    next2->prev = lst1; // не являющегося последним
+                
+                lst1->prev = prev2;
+                
+                if (next1 != NULL)
+                    next1->prev = lst2;
+            }
+
+            if (lst1 == head)
+                return(lst2);
+
+            if (lst2 == head)
+                return(lst1);
+
+            return(head);
         }
 
-        void resize() {
+        void resize(int size, int value) {
+            if(size > list->size) {
+                int deltaSize = size - list->size;
 
+                for (int i = 0; i < deltaSize; i++) 
+                    this->push_back(value);
+            }
+
+            if(size < list->size) {
+                int deltaSize = list->size - size;
+
+                for (int i = 0; i < deltaSize; i++) 
+                    this->pop_back();
+            }
         }
 
         void clear() {
@@ -278,14 +349,14 @@ int main() {
 	#endif
 
     my_list li;
-    header *tmp = create_header();
 
     for (int i = 0; i < 5; i++) 
         li.push_back(27 - i);
     
     li.print_list();
 
-    cout << "searchByPos(): " << li.searchByPos(2) << endl;
+    li.swap(li.get_elem(2), li.get_elem(3));
+    li.print_list();
 
     #if DEBUG
 		fclose(fdw);

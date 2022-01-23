@@ -1,13 +1,11 @@
 BIN := main
 SRC := main.cpp 
-EXT_CPP := /Users/dmitry/Programming/C/Lists/lists.c
-EXT_H := /Users/dmitry/Programming/C/Lists/list_header.h
 CC := g++
-CFLAGS := -I
+CFLAGS := 
 LDFLAGS :=
 
 $(BIN): $(SRC)
-	clear && $(CC) $(SRC) $(EXT_CPP) $(CFLAGS) $(EXT_H) $(LDFLAGS) -o $(BIN)
+	clear && $(CC) $(SRC) $(CFLAGS) $(LDFLAGS) -o $(BIN)
 
 clean:
 	rm -rf $(BIN)
