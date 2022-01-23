@@ -42,6 +42,30 @@ class my_list {
 
         header *list;
 
+        lst* get_elem(int index) {
+            lst *tmp = NULL;
+            size_t i;
+            
+            if (index < list->size / 2) {
+                i = 0;
+                tmp = list->head;
+                while (tmp && i < index) {
+                    tmp = tmp->next;
+                    i++;
+                }
+            } 
+            else {
+                i = list->size - 1;
+                tmp = list->tail;
+                while (tmp && i > index) {
+                    tmp = tmp->prev;
+                    i--;
+                }
+            }
+        
+            return tmp;
+        }
+
     public:
         my_list() {
             list = (header*) malloc(sizeof(header));
@@ -49,13 +73,13 @@ class my_list {
             list->head = list->tail = NULL;
         }
 
-        int search(header *list, int value){
-            if(!list){
-                LOG_CHAR(LOG_ERROR, "search() return -1")
+        int searchByValue(int value){
+            if(!list) {
+                LOG_CHAR(LOG_ERROR, "searchByValue() return -1")
                 return -1;
             }
 
-            int pos = 0;
+            int pos = 1;
             lst *tmp = list->head;
 
             while(tmp) {
@@ -66,8 +90,22 @@ class my_list {
                 pos++;
             }
 
-            LOG_CHAR(LOG_ERROR, "search() return -2")
+            LOG_CHAR(LOG_ERROR, "searchByValue() return -2")
             return -2;
+        }
+
+        int searchByPos(int pos){
+            if(!list) {
+                LOG_CHAR(LOG_ERROR, "searchByPos() return -1")
+                return -1;
+            }
+
+            lst *tmp = list->head;
+
+            for(int i = 1; i < pos; i++) 
+                tmp = tmp->next;
+
+            return tmp->value;
         }
 
         void push_front(int value) {
@@ -158,8 +196,31 @@ class my_list {
             list->size--;
         }
 
-        void insert() {
+        void insert(int index, int value) {
+            lst *ins = (lst*) malloc(sizeof(lst));
+            lst *elm = get_elem(index);
 
+            if (elm) {
+                ins->value = value;
+                ins->prev = elm;
+                ins->next = elm->next;
+                
+                if (elm->next) 
+                    elm->next->prev = ins;
+                
+                elm->next = ins;
+            
+                if (!elm->prev) 
+                    list->head = elm;
+                
+                if (!elm->next) 
+                    list->tail = elm;
+            
+                list->size++;
+            }
+            else {
+                LOG_CHAR(LOG_ERROR, "can't insert element")
+            }
         }
 
         void erase(int value) {
@@ -220,12 +281,11 @@ int main() {
     header *tmp = create_header();
 
     for (int i = 0; i < 5; i++) 
-        li.push_front(i);
+        li.push_back(27 - i);
     
     li.print_list();
 
-    li.erase(2);
-    li.print_list();
+    cout << "searchByPos(): " << li.searchByPos(2) << endl;
 
     #if DEBUG
 		fclose(fdw);
