@@ -4,21 +4,23 @@ template <class T>
 class my_vector {
     private:
         T *vector;
-        int size;
 
     public:
+        int Size;       // current Size
+        int capacity;   // max_size
+
     // Member functions
 
         my_vector() {
-            size = 2;
-            vector = new vector[size];
+            capacity = Size = 1;
+            vector = new T[Size];
         }
 
         my_vector(int n, T value) {
-            size = n;
-            vector = new vector[size];
+            capacity = Size = n;
+            vector = new T[Size];
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < Size; i++)
                 vector[i] = value;
         }
 
@@ -26,9 +28,9 @@ class my_vector {
             delete[] vector;
         }
 
-        T operator=() {
+        // T operator=() {
 
-        }
+        // }
 
     // Iterators
 
@@ -43,26 +45,43 @@ class my_vector {
     // Capacity
 
         int size() {
-
+            return this->Size;
         }
 
         int max_size() {
-
+            return this->capacity;
         }
 
-        void resize() {
+        void resize(int n, int value) {
+            T *tmp = new T[n];
 
+            for (int i = 0; i < n; i++)
+                tmp[i] = vector[i];
+
+            delete[] vector;
+
+            vector = tmp;
+
+            if(n > Size) {
+                for (int i = 0; i < Size; i++)
+                    vector[i] = value;
+            }
+
+            capacity = Size = n;
         }
 
         bool empty() {
-
+            if(!this->Size)
+                return true;
+            else
+                return false;
         }
 
     // Element access
 
-        T operator[]() {
+        // T operator[]() {
 
-        }
+        // }
 
         T at() {
 
