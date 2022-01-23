@@ -43,20 +43,20 @@ class my_queue {
         }
 
         void pop() {
-            queue_t *next = NULL;
+            queue_t *prev = NULL;
             T tmp = 0;
         
-            next = queue->tail;
-            queue->tail = queue->tail->prev;
+            prev = queue->head;
+            queue->head = queue->head->next;
 
-            if (queue->tail) 
-                queue->tail->next = NULL;
+            if (queue->head) 
+                queue->head->prev = NULL;
 
-            if (next == queue->head) 
-                queue->head = NULL;
+            if (prev == queue->tail) 
+                queue->tail = NULL;
             
-            tmp = next->data;
-            free(next);
+            tmp = prev->data;
+            free(prev);
         
             queue->size--;
         }

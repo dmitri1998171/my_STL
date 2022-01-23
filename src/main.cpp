@@ -11,11 +11,11 @@ int main() {
     my_queue<int> qe;
 
     for (int i = 0; i < 5; i++)
-        qe.push(52 - i);
+        qe.push(i);
 
     qe.print_queue();
 
-    qe.swap(qe.get_elem(2), qe.get_elem(3));
+    qe.pop();
     qe.print_queue();
 
     #if DEBUG
