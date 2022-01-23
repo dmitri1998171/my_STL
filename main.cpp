@@ -24,10 +24,11 @@
 
 using namespace std;
 
+template <class T>
 class my_list {
     private:
         typedef struct my_list_t {
-            int data;
+            T data;
             struct my_list_t *prev;
             struct my_list_t *next;
         }lst;
@@ -72,7 +73,7 @@ class my_list {
             return tmp;
         }
 
-        int searchByValue(int value){
+        int searchByValue(T value){
             if(!list) {
                 LOG_CHAR(LOG_ERROR, "searchByValue() return -1")
                 return -1;
@@ -93,7 +94,7 @@ class my_list {
             return -2;
         }
 
-        int searchByPos(int pos){
+        T searchByPos(int pos){
             if(!list) {
                 LOG_CHAR(LOG_ERROR, "searchByPos() return -1")
                 return -1;
@@ -107,7 +108,7 @@ class my_list {
             return tmp->data;
         }
 
-        void push_front(int value) {
+        void push_front(T value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
             tmp->data = value;
@@ -125,7 +126,7 @@ class my_list {
             list->size++;
         }
 
-        void push_back(int value) {
+        void push_back(T value) {
             lst *tmp = (lst*) malloc(sizeof(lst));
 
             tmp->data = value;
@@ -160,7 +161,7 @@ class my_list {
 
         void pop_back() {
             lst *next = NULL;
-            int tmp = 0;
+            T tmp = 0;
         
             next = list->tail;
             list->tail = list->tail->prev;
@@ -179,7 +180,7 @@ class my_list {
 
         void pop_front() {
             lst *prev = NULL;
-            int tmp = 0;
+            T tmp = 0;
         
             prev = list->head;
             list->head = list->head->next;
@@ -195,7 +196,7 @@ class my_list {
             list->size--;
         }
 
-        void insert(int index, int value) {
+        void insert(int index, T value) {
             lst *ins = (lst*) malloc(sizeof(lst));
             lst *elm = get_elem(index);
 
@@ -222,12 +223,12 @@ class my_list {
             }
         }
 
-        void erase(int value) {
-            lst *current_list_item = list->head;
+        void erase(T value) {
+            lst *current_item = list->head;
 
-            while (current_list_item) {
-                lst *tmp = current_list_item;
-                current_list_item = current_list_item->next;
+            while (current_item) {
+                lst *tmp = current_item;
+                current_item = current_item->next;
 
                 if(value == tmp->data) {
                     if (tmp->prev) 
@@ -312,7 +313,7 @@ class my_list {
             return(head);
         }
 
-        void resize(int size, int value) {
+        void resize(int size, T value) {
             if(size > list->size) {
                 int deltaSize = size - list->size;
 
@@ -341,6 +342,10 @@ class my_list {
             free(list);
             list = NULL;
         }
+
+        ~my_list() {
+            delete list;
+        }
 };
 
 int main() {
@@ -348,10 +353,10 @@ int main() {
 		fdw = fopen("log.log", "w");
 	#endif
 
-    my_list li;
+    my_list<float> li;
 
     for (int i = 0; i < 5; i++) 
-        li.push_back(27 - i);
+        li.push_back(27 - (i + 0.5));
     
     li.print_list();
 
