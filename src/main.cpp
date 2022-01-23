@@ -1,21 +1,22 @@
 #include "../include/header.hpp"
 #include "../include/list.hpp"
 #include "../include/stack.hpp"
+#include "../include/queue.hpp"
 
 int main() {
     #if DEBUG
 		fdw = fopen("log.log", "w");
 	#endif
 
-    my_stack<int> st;
+    my_queue<int> qe;
 
     for (int i = 0; i < 5; i++)
-        st.push(52 - i);
+        qe.push(52 - i);
 
-    st.print_stack();
+    qe.print_queue();
 
-    st.swap(st.get_elem(2), st.get_elem(3));
-    st.print_stack();
+    qe.swap(qe.get_elem(2), qe.get_elem(3));
+    qe.print_queue();
 
     #if DEBUG
 		fclose(fdw);
