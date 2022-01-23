@@ -9,15 +9,10 @@ int main() {
 		fdw = fopen("log.log", "w");
 	#endif
 
-    my_deque<int> qe;
 
-    for (int i = 0; i < 5; i++)
-        qe.push_back(i);
+    // for (int i = 0; i < 5; i++)
 
-    qe.print_deque();
-
-    cout << qe.at(3) << endl;
-    // qe.print_deque();
+    
 
     #if DEBUG
 		fclose(fdw);
