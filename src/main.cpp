@@ -14,6 +14,9 @@ int main() {
 
     st.print_stack();
 
+    st.swap(st.get_elem(2), st.get_elem(3));
+    st.print_stack();
+
     #if DEBUG
 		fclose(fdw);
 	#endif
