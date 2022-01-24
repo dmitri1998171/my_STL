@@ -14,15 +14,15 @@ class my_vector {
     // Member functions
 
         my_vector() {
-            capacity = Size = 0;
-            vector = new T[capacity];
+            this->capacity = this->Size = 0;
+            vector = new T[this->capacity];
         }
 
         my_vector(int n, T value) {
-            capacity = Size = n;
-            vector = new T[capacity];
+            this->capacity = this->Size = n;
+            vector = new T[this->capacity];
 
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < this->Size; i++)
                 vector[i] = value;
         }
 
@@ -80,8 +80,6 @@ class my_vector {
 
             delete[] vector;
             vector = tmp;
-            Size = n;
-            capacity = Size + OFFSET;
         }
 
         bool empty() {
@@ -106,33 +104,77 @@ class my_vector {
         }
 
         T back() {
-            return vector[this->Size];
+            return vector[this->Size - 1];
         }
 
     // Modifiers
 
         void push_back(T value) {
-            vector[Size] = value;
+            vector[this->Size] = value;
             this->Size++;
 
-            if(this->Size > this->capacity)
-                resize(this->Size);
+            if(this->Size > this->capacity) {
+                this->capacity = this->Size + OFFSET;
+                resize(this->capacity);
+            }
         }
 
         void pop_back() {
-
+            vector[this->Size] = 0;
+            this->Size--;
         }
 
-        void insert() {
+        void insert(int pos, T value) {
+            this->Size++;
+            T *tmp = new T[this->Size];
 
+            // Copy vector
+            for (int j = 0; j < this->Size; j++)
+                tmp[j] = vector[j];
+
+            delete[] vector;
+            vector = new T[this->capacity];
+
+            //  Resize vector
+            if(this->Size > this->capacity) {
+                this->capacity = this->Size + OFFSET;
+                resize(this->capacity);
+            }
+
+            // Fill vector from copy
+            for (int j = 0; j < pos; j++) 
+                vector[j] = tmp[j];
+
+            vector[pos] = value;
+
+            for (int j = pos + 1; j < this->Size; j++) 
+                vector[j] = tmp[j - 1];
         }
 
-        void erase() {
+        // void insert(iterator pos, T value) {
+        //     T *tmp = new T[n];
 
-        }
+        // }
 
-        void swap() {
+        void erase(int pos) {
+            T *tmp = new T[this->Size];
 
+            // Copy vector
+            for (int j = 0; j < pos; j++) 
+                tmp[j] = vector[j];
+
+            for (int j = pos + 1; j < this->Size; j++) 
+                tmp[j - 1] = vector[j];
+
+            delete[] vector;
+            vector = new T[this->capacity];
+
+            this->Size--;
+
+            // Fill vector from copy
+            for (int j = 0; j < this->Size; j++) {
+                vector[j] = tmp[j];
+            }
         }
 
         void print_vector() {
@@ -141,6 +183,8 @@ class my_vector {
         }
 
         void clear() {
-
+            delete[] vector;
+            vector = new T[0];
+            this->capacity = this->Size = 0;
         }
 };

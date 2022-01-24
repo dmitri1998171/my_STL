@@ -10,15 +10,21 @@ int main() {
 	#endif
 
     my_vector<int> vt;
-
-    LOG_NUM(LOG_DEBUG, vt.size())
-    LOG_NUM(LOG_DEBUG, vt.max_size())
-
-    for (int i = 1; i <= 12; i++)
+    
+    for (int i = 98; i <= 97 + 7; i++)
         vt.push_back(i);
 
+    vt.print_vector();
+    cout << endl;
+
     LOG_NUM(LOG_DEBUG, vt.size())
     LOG_NUM(LOG_DEBUG, vt.max_size())
+
+    vt.erase(3);
+
+    LOG_NUM(LOG_DEBUG, vt.size())
+    LOG_NUM(LOG_DEBUG, vt.max_size())
+
     vt.print_vector();
     
 
