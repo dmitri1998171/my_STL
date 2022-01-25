@@ -9,24 +9,15 @@ int main() {
 		fdw = fopen("log.log", "w");
 	#endif
 
-    my_vector<int> vt;
+    my_list<int> li;
+    cout << endl << li.max_size() << " " << li.size() << endl;
+
+    for (int i = 0; i < 6; i++)
+        li.push_back(i);
     
-    for (int i = 98; i <= 97 + 7; i++)
-        vt.push_back(i);
+    li.print_list();
 
-    vt.print_vector();
-    cout << endl;
-
-    LOG_NUM(LOG_DEBUG, vt.size())
-    LOG_NUM(LOG_DEBUG, vt.max_size())
-
-    vt.erase(3);
-
-    LOG_NUM(LOG_DEBUG, vt.size())
-    LOG_NUM(LOG_DEBUG, vt.max_size())
-
-    vt.print_vector();
-    
+    cout << endl << li.max_size() << " " << li.size() << endl;
 
     #if DEBUG
 		fclose(fdw);

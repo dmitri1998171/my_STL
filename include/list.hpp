@@ -1,5 +1,7 @@
 #include "../include/header.hpp"
 
+#define OFFSET 5
+
 template <class T>
 class my_list {
     private:
@@ -16,10 +18,12 @@ class my_list {
         } header;
 
         header *list;
+        int capacity;
 
     public:
         my_list() {
             list = (header*) malloc(sizeof(header));
+            capacity = OFFSET;
             list->size = 0;
             list->head = list->tail = NULL;
         }
@@ -84,40 +88,79 @@ class my_list {
             return tmp->data;
         }
 
+        T front() {
+            return list->head;
+        }
+
+        T back() {
+            return list->tail;
+        }
+
+        int size() {
+            return list->size;
+        }
+
+        int max_size() {
+            return this->capacity;
+        }
+
+        bool empty() {
+            if(!list->size)
+                return true;
+            else
+                return false;
+        }
+
         void push_front(T value) {
-            lst *tmp = (lst*) malloc(sizeof(lst));
+            if(!list->size)
+                capacity += OFFSET;
 
-            tmp->data = value;
-            tmp->prev = NULL;
-            tmp->next = list->head;
-
-            if (list->head) 
-                list->head->prev = tmp;
-
-            list->head = tmp;
-        
-            if (list->tail == NULL) 
-                list->tail = tmp;
-            
             list->size++;
+
+            if(list->size > capacity) {
+                cout << "the list is full!" << endl;
+            }
+            else {
+                lst *tmp = (lst*) malloc(sizeof(lst));
+
+                tmp->data = value;
+                tmp->prev = NULL;
+                tmp->next = list->head;
+
+                if (list->head) 
+                    list->head->prev = tmp;
+
+                list->head = tmp;
+            
+                if (list->tail == NULL) 
+                    list->tail = tmp;
+            }
         }
 
         void push_back(T value) {
-            lst *tmp = (lst*) malloc(sizeof(lst));
+            if(list->size == 0)
+                capacity += OFFSET;
 
-            tmp->data = value;
-            tmp->prev = list->tail;
-            tmp->next = NULL;
-
-            if (list->tail) 
-                list->tail->next = tmp;
-            
-            list->tail = tmp;
-        
-            if (list->head == NULL) 
-                list->head = tmp;
-            
             list->size++;
+
+            if(list->size > capacity) {
+                cout << "the list is full!" << endl;
+            }
+            else {
+                lst *tmp = (lst*) malloc(sizeof(lst));
+
+                tmp->data = value;
+                tmp->prev = list->tail;
+                tmp->next = NULL;
+
+                if (list->tail) 
+                    list->tail->next = tmp;
+                
+                list->tail = tmp;
+            
+                if (list->head == NULL) 
+                    list->head = tmp;
+            }
         }
 
         void print_list() {
@@ -291,16 +334,12 @@ class my_list {
 
         void resize(int size, T value) {
             if(size > list->size) {
-                int deltaSize = size - list->size;
-
-                for (int i = 0; i < deltaSize; i++) 
+                for (int i = list->size + 1; i < size; i++) 
                     this->push_back(value);
             }
 
             if(size < list->size) {
-                int deltaSize = list->size - size;
-
-                for (int i = 0; i < deltaSize; i++) 
+                for (int i = size; i < list->size; i++) 
                     this->pop_back();
             }
         }

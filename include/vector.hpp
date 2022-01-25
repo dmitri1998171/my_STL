@@ -65,7 +65,7 @@ class my_vector {
             vector = tmp;
 
             if(n > Size) {
-                for (int i = 0; i < Size; i++)
+                for (int i = Size + 1; i < n; i++)
                     vector[i] = value;
             }
 
