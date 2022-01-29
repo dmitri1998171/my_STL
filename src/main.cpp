@@ -1,5 +1,6 @@
 #include "../include/header.hpp"
 #include "../include/list.hpp"
+#include "../include/forward_list.hpp"
 #include "../include/stack.hpp"
 #include "../include/queue.hpp"
 #include "../include/vector.hpp"
