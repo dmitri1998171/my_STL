@@ -180,7 +180,6 @@ class my_list {
 
         void pop_back() {
             lst *next = NULL;
-            T tmp = 0;
         
             next = list->tail;
             list->tail = list->tail->prev;
@@ -191,15 +190,12 @@ class my_list {
             if (next == list->head) 
                 list->head = NULL;
             
-            tmp = next->data;
             free(next);
-        
             list->size--;
         }
 
         void pop_front() {
             lst *prev = NULL;
-            T tmp = 0;
         
             prev = list->head;
             list->head = list->head->next;
@@ -209,9 +205,7 @@ class my_list {
             if (prev == list->tail) 
                 list->tail = NULL;
             
-            tmp = prev->data;
             free(prev);
-        
             list->size--;
         }
 
@@ -268,7 +262,7 @@ class my_list {
             }
         }
 
-        lst* swap(lst *lst1, lst *lst2) {
+        void swap(lst *lst1, lst *lst2) {
             // Возвращает новый корень списка
             lst *prev1, *prev2, *next1, *next2;
             lst *head = list->head;
@@ -296,10 +290,12 @@ class my_list {
                 lst1->prev = prev2;
                 lst2->next = next1;
                 lst2->prev = lst1;
+
                 if(next1 != NULL)
-                next1->prev = lst2;
+                    next1->prev = lst2;
+
                 if (lst2 != head)
-                prev2->next = lst1;
+                    prev2->next = lst1;
             }
 
             else { // обмениваются отстоящие узлы
@@ -322,14 +318,6 @@ class my_list {
                 if (next1 != NULL)
                     next1->prev = lst2;
             }
-
-            if (lst1 == head)
-                return(lst2);
-
-            if (lst2 == head)
-                return(lst1);
-
-            return(head);
         }
 
         void resize(int size, T value) {
