@@ -4,8 +4,8 @@
 #include "../include/stack.hpp"
 #include "../include/queue.hpp"
 #include "../include/vector.hpp"
-// #include "../include/forward_list.hpp"
-#include "../include/array.hpp"
+// #include "../include/array.hpp"
+#include "../include/string.hpp"
 
 #include <string.h>
 
@@ -14,10 +14,6 @@ int main() {
 		fdw = fopen("log.log", "w");
 	#endif
 
-    my_array<char, 6> arr;
-
-    arr.fill('*');
-    arr.print_arr();
 
 
     #if DEBUG
